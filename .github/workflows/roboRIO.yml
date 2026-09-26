@@ -21,6 +21,7 @@ jobs:
         with:
           fetch-depth: 0
           sparse-checkout: "roboRIO"
+          sparse-checkout-cone-mode: false
 
       - name: Move to project root directory
         run: |
@@ -52,6 +53,7 @@ jobs:
         with:
           fetch-depth: 0
           sparse-checkout: "roboRIO"
+          sparse-checkout-cone-mode: false
 
       - name: Move to project root directory
         run: |
