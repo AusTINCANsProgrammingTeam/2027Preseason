@@ -1,5 +1,5 @@
-# 2027 Robot Code
-### Welcome to FRC Team 2158 austinCANs' robot code repo for the FIRST FRC 2027 BioCore Season
+# 2027 Preseason Robot Code
+### Welcome to FRC Team 2158 austinCANs' robot code repo for the FIRST FRC 2027 BioCore Preseason
 
 #### For students/contributors:
 - Follow the [WPILib Installation Guide](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/wpilib-setup.html) to setup your programming environment. 
