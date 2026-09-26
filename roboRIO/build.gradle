@@ -179,3 +179,15 @@ dependencies {
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit:akit-autolog:$akitJson.version"
 }
+
+spotlessCheck.mustRunAfter('spotlessApply')
+compileJava.finalizedBy("spotlessApply")
+
+// Prevents compilation errors from causing spotless errors
+tasks.matching { it.name.startsWith('spotless') }.configureEach { task ->
+    task.onlyIf {
+        // Only run Spotless if compileJava exists and completed successfully
+        def compileTask = tasks.findByName('compileJava')
+        return compileTask == null || compileTask.state.failure == null
+    }
+}
