@@ -20,6 +20,13 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          sparse-checkout: "SystemCore"
+
+      - name: Move to project root directory
+        run: |
+          cp -r SystemCore/. .
+          rm -rf SystemCore
+
       # Runs a single command using the runners shell
       - name: Compile and run tests on robot code
         run: ./gradlew build
@@ -44,6 +51,13 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          sparse-checkout: "SystemCore"
+
+      - name: Move to project root directory
+        run: |
+          cp -r SystemCore/. .
+          rm -rf SystemCore
+
       - uses: actions/setup-java@v5
         with:
           distribution: "temurin"
