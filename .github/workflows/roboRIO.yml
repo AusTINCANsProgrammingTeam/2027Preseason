@@ -41,7 +41,7 @@ jobs:
         # Awk One-liner stolen from https://stackoverflow.com/questions/27447705/grep-without-filtering
 
       - name: Git Clean Check
-        run: test -z "$(git status --porcelain)" || { git diff; exit 1; }
+        run: test -z "$(git status --porcelain)" || { git diff; (exit 1); }
 
   spotless:
     # The type of runner that the job will run on
