@@ -23,18 +23,18 @@ jobs:
           sparse-checkout: "roboRIO"
           sparse-checkout-cone-mode: false
 
-      - name: Move to project root directory
-        run: |
-          cp -r roboRIO/. .
-          rm -rf roboRIO
+      - name: Set as safe directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Runs a single command using the runners shell
       - name: Compile and run tests on robot code
         run: ./gradlew build
+        working-directory: ./roboRIO
 
       # Runs a simulation to spot check crashes
       - name: Run simulation to check for runtime errors
         run: timeout 15s ./gradlew simulateJava 2>&1 | awk -v rc=0 '/The robot program quit unexpectedly/ { rc=1 } 1; END {exit rc}'
+        working-directory: ./roboRIO
         # 1. Run simulation with 1 minute timeout
         # 2. Redirect stderr to stdout (just in case)
         # 3. Use awk to check for robot crash message and set the return code based on this. (Alternative to grep that doesn't filter the simulation output)
@@ -55,13 +55,9 @@ jobs:
           sparse-checkout: "roboRIO"
           sparse-checkout-cone-mode: false
 
-      - name: Move to project root directory
-        run: |
-          cp -r roboRIO/. .
-          rm -rf roboRIO
-
       - uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version: 17
       - run: ./gradlew spotlessCheck
+        working-directory: ./roboRIO
