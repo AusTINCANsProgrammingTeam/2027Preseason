@@ -1,18 +1,18 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import edu.wpi.first.hal.HAL;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.MainSubsystem;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ExampleUnitTest {
-  private ExampleSubsystem m_exampleSubsys;
+  private MainSubsystem m_exampleSubsys;
 
   @BeforeEach // this method will run before each test
   void setup() {
     assert HAL.initialize(500, 0); // initialize the HAL, crash if failed
-    m_exampleSubsys = new ExampleSubsystem();
+    m_exampleSubsys = new MainSubsystem();
   }
 
   @AfterEach // this method will run after each test
