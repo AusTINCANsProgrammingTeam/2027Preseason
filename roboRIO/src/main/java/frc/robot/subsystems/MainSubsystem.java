@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
@@ -11,13 +12,16 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import idkthewholeimportstatement;
 
 public class MainSubsystem extends SubsystemBase {
   private SparkMax topLeft;
   private SparkMax topRight;
   private SparkMax bottomLeft;
   private SparkMax bottomRight;
+  private RelativeEncoder topLeftEncoder = topLeft.getEncoder();
+  private RelativeEncoder bottomLeftEncoder = bottomLeft.getEncoder();
+  private RelativeEncoder topRightEncoder = topRight.getEncoder();
+  private RelativeEncoder bottomRightEncoder = bottomRight.getEncoder();
   private SparkClosedLoopController  topLeftController;
   private SparkClosedLoopController  topRightController;
   private SparkClosedLoopController  bottomLeftController;
@@ -35,7 +39,7 @@ public class MainSubsystem extends SubsystemBase {
     bottomRightController = bottomRight.getClosedLoopController();
   }
   public enum names{TOPLEFT, TOPRIGHT,BOTTOMLEFT,BOTTOMRIGHT}
-  public void moveMotor(int motor,int pos){
+  public void moveMotor(int motor, int pos){
       switch(motor){
           case 0:
               topLeftController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
@@ -49,15 +53,30 @@ public class MainSubsystem extends SubsystemBase {
           case 3:
               bottomRightController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
               break;
+          case 4:
+              topLeftController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
+              topRightController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
+              bottomLeftController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
+              bottomRightController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
+              break;
       }
   }
-  public Command runGymnastics(){
-      Command cmd = startEnd(()->{
+  public Command runTest(){
+    return runOnce(()->{
+        calibrate();
+        moveMotor(4,90);
+        calibrate();
+        moveMotor(4,-90);
+        calibrate();
+        moveMotor(4,360);
+    });
+  }
+  public void calibrate(){
 
-      },()->{
-
-      });
-      return cmd;
+      moveMotor(0,(int)Units.rotationsToDegrees(-(topLeftEncoder.getPosition())));
+      moveMotor(1,(int)Units.rotationsToDegrees(-(topRightEncoder.getPosition())));
+      moveMotor(2,(int)Units.rotationsToDegrees(-(bottomLeftEncoder.getPosition())));
+      moveMotor(3,(int)Units.rotationsToDegrees(-(bottomRightEncoder.getPosition())));
   }
   @Override
   public void periodic() {
