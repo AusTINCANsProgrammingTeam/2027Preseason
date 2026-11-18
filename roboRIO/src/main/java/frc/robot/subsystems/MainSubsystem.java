@@ -40,8 +40,7 @@ public class MainSubsystem extends SubsystemBase {
   }
 
   public Runnable moveMotor(int motor, int pos) {
-    switch (motor) {//
-
+    switch (motor) { //
       case 0:
         topLeftController.setSetpoint(
             Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
@@ -69,24 +68,29 @@ public class MainSubsystem extends SubsystemBase {
             Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
         break;
     }
-      return null;
+    return null;
   }
 
   public Command runTest() {
     return runOnce(
-        () -> {calibrate();})
-            .andThen(new WaitCommand(1))
-            .andThen(moveMotor(4, 90))
-            .andThen(calibrate())
-            .andThen(moveMotor(4, -90))
-            .andThen(calibrate())
-            .andThen(moveMotor(4, 360))
-            ;
+            () -> {
+              calibrate();
+            })
+        .andThen(new WaitCommand(1))
+        .andThen(moveMotor(4, 90))
+        .andThen(new WaitCommand(1))
+        .andThen(calibrate())
+        .andThen(new WaitCommand(1))
+        .andThen(moveMotor(4, -90))
+        .andThen(new WaitCommand(1))
+        .andThen(calibrate())
+        .andThen(new WaitCommand(1))
+        .andThen(moveMotor(4, 360));
   }
 
   public Runnable calibrate() {
     moveMotor(0, 0);
-      return null;
+    return null;
   }
 
   @Override
