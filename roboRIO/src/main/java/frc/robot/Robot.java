@@ -12,6 +12,10 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import edu.wpi.first.wpilibj.Joystick;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -24,6 +28,14 @@ public class Robot extends LoggedRobot {
   private final RobotContainer m_robotContainer;
 
   private final Boolean replay_log = false;
+
+  private static final int leadDeviceIdL = 15;
+  private static final int leadDeviceIdR = 6;
+  private static final int kJoystickPort = 0; /* IDK what number to put here */
+  
+  private SparkMax m_rightLeader;
+  private SparkMax m_leftLeader;
+  private Joystick m_Joystick;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -59,6 +71,10 @@ public class Robot extends LoggedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    m_leftLeader = new SparkMax(leadDeviceIdL , MotorType.kBrushless);
+    m_rightLeader = new SparkMax(leadDeviceIdR , MotorType.kBrushless);
+    m_Joystick = new Joystick(kJoystickPort);
   }
 
   /**
@@ -115,7 +131,10 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_leftLeader.set(m_Joystick.getY());
+    m_rightLeader.set(m_Joystick.getY());
+  }
 
   @Override
   public void testInit() {
