@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class MainSubsystem extends SubsystemBase {
   private SparkMax topLeft;
@@ -38,7 +39,7 @@ public class MainSubsystem extends SubsystemBase {
     bottomRightController = bottomRight.getClosedLoopController();
   }
 
-  public void moveMotor(int motor, int pos) {
+  public Runnable moveMotor(int motor, int pos) {
     switch (motor) {//
 
       case 0:
@@ -68,26 +69,24 @@ public class MainSubsystem extends SubsystemBase {
             Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
         break;
     }
+      return null;
   }
 
   public Command runTest() {
     return runOnce(
-        () -> {
-          calibrate();
-          moveMotor(4, 90);
-          calibrate();
-          moveMotor(4, -90);
-          calibrate();
-          moveMotor(4, 360);
-        });
+        () -> {calibrate();})
+            .andThen(new WaitCommand(1))
+            .andThen(moveMotor(4, 90))
+            .andThen(calibrate())
+            .andThen(moveMotor(4, -90))
+            .andThen(calibrate())
+            .andThen(moveMotor(4, 360))
+            ;
   }
 
-  public void calibrate() {
-
-    moveMotor(0, (int) Units.rotationsToDegrees(-(topLeftEncoder.getPosition())));
-    moveMotor(1, (int) Units.rotationsToDegrees(-(topRightEncoder.getPosition())));
-    moveMotor(2, (int) Units.rotationsToDegrees(-(bottomLeftEncoder.getPosition())));
-    moveMotor(3, (int) Units.rotationsToDegrees(-(bottomRightEncoder.getPosition())));
+  public Runnable calibrate() {
+    moveMotor(0, 0);
+      return null;
   }
 
   @Override
