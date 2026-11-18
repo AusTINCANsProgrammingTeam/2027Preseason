@@ -56,7 +56,7 @@ public class ExampleSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          if (getJoystickAngle(controller) != joystickPos) {
+          if (getJoystickAngle(controller) + Math.PI/16 >= joystickPos && joystickPos >= getJoystickAngle(controller) - Math.PI/16) {
             motor1Controller.setSetpoint(
                 Units.radiansToRotations(getJoystickAngle(controller))
                     + motor1Encoder.getPosition(),
