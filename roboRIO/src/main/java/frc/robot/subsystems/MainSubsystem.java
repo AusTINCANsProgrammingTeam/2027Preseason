@@ -22,11 +22,10 @@ public class MainSubsystem extends SubsystemBase {
   private RelativeEncoder bottomLeftEncoder = bottomLeft.getEncoder();
   private RelativeEncoder topRightEncoder = topRight.getEncoder();
   private RelativeEncoder bottomRightEncoder = bottomRight.getEncoder();
-  private SparkClosedLoopController  topLeftController;
-  private SparkClosedLoopController  topRightController;
-  private SparkClosedLoopController  bottomLeftController;
-  private SparkClosedLoopController  bottomRightController;
-
+  private SparkClosedLoopController topLeftController;
+  private SparkClosedLoopController topRightController;
+  private SparkClosedLoopController bottomLeftController;
+  private SparkClosedLoopController bottomRightController;
 
   public MainSubsystem() {
     topLeft = new SparkMax(3, SparkLowLevel.MotorType.kBrushless);
@@ -38,46 +37,59 @@ public class MainSubsystem extends SubsystemBase {
     bottomLeftController = bottomLeft.getClosedLoopController();
     bottomRightController = bottomRight.getClosedLoopController();
   }
-  public enum names{TOPLEFT, TOPRIGHT,BOTTOMLEFT,BOTTOMRIGHT}
-  public void moveMotor(int motor, int pos){
-      switch(motor){
-          case 0:
-              topLeftController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
-              break;
-          case 1:
-              topRightController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
-              break;
-          case 2:
-              bottomLeftController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
-              break;
-          case 3:
-              bottomRightController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
-              break;
-          case 4:
-              topLeftController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
-              topRightController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
-              bottomLeftController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
-              bottomRightController.setSetpoint(Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
-              break;
-      }
-  }
-  public Command runTest(){
-    return runOnce(()->{
-        calibrate();
-        moveMotor(4,90);
-        calibrate();
-        moveMotor(4,-90);
-        calibrate();
-        moveMotor(4,360);
-    });
-  }
-  public void calibrate(){
 
-      moveMotor(0,(int)Units.rotationsToDegrees(-(topLeftEncoder.getPosition())));
-      moveMotor(1,(int)Units.rotationsToDegrees(-(topRightEncoder.getPosition())));
-      moveMotor(2,(int)Units.rotationsToDegrees(-(bottomLeftEncoder.getPosition())));
-      moveMotor(3,(int)Units.rotationsToDegrees(-(bottomRightEncoder.getPosition())));
+  public void moveMotor(int motor, int pos) {
+    switch (motor) {//
+
+      case 0:
+        topLeftController.setSetpoint(
+            Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
+        break;
+      case 1:
+        topRightController.setSetpoint(
+            Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
+        break;
+      case 2:
+        bottomLeftController.setSetpoint(
+            Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
+        break;
+      case 3:
+        bottomRightController.setSetpoint(
+            Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
+        break;
+      case 4:
+        topLeftController.setSetpoint(
+            Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
+        topRightController.setSetpoint(
+            Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
+        bottomLeftController.setSetpoint(
+            Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
+        bottomRightController.setSetpoint(
+            Units.degreesToRotations(pos), SparkBase.ControlType.kPosition);
+        break;
+    }
   }
+
+  public Command runTest() {
+    return runOnce(
+        () -> {
+          calibrate();
+          moveMotor(4, 90);
+          calibrate();
+          moveMotor(4, -90);
+          calibrate();
+          moveMotor(4, 360);
+        });
+  }
+
+  public void calibrate() {
+
+    moveMotor(0, (int) Units.rotationsToDegrees(-(topLeftEncoder.getPosition())));
+    moveMotor(1, (int) Units.rotationsToDegrees(-(topRightEncoder.getPosition())));
+    moveMotor(2, (int) Units.rotationsToDegrees(-(bottomLeftEncoder.getPosition())));
+    moveMotor(3, (int) Units.rotationsToDegrees(-(bottomRightEncoder.getPosition())));
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
