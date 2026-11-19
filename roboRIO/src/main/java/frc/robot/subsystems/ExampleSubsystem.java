@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ExampleSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   private Servo SpinnyWheel;
+
   public ExampleSubsystem() {
     SpinnyWheel = new Servo(9);
   }
@@ -25,7 +26,7 @@ public class ExampleSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-        SpinnyWheel.set(Math.random());
+          SpinnyWheel.set(Math.random());
         });
   }
 
