@@ -4,12 +4,16 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ExampleSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  public ExampleSubsystem() {}
+  private Servo SpinnyWheel;
+  public ExampleSubsystem() {
+    SpinnyWheel = new Servo(9);
+  }
 
   /**
    * Example command factory method.
@@ -21,7 +25,7 @@ public class ExampleSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          /* one-time action goes here */
+        SpinnyWheel.set(Math.random());
         });
   }
 
